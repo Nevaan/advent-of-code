@@ -24,16 +24,18 @@ export const mapLayerIntoNumberArray = (input: string): number[] => {
 }
 
 export const findLayerWithFewestDigit = (input: string, h: number, w: number, digit: number): number[] => {
-    let layers = sliceIntoLayers(input, h, w)
-        .map(layer => mapLayerIntoNumberArray(layer));
-
-
+    let layers = createLayers(input,h,w);
 
     let fewestDigitsLayerIdx = layers
         .map((layer, idx) => { return { digits: countDigit(layer, digit), idx: idx}})
         .sort((digitsCount1, digitsCount2) => digitsCount1.digits - digitsCount2.digits)
     return layers[fewestDigitsLayerIdx[0].idx];
 } 
+
+export const createLayers = (input: string, h: number, w: number) => {
+    return sliceIntoLayers(input, h, w)
+    .map(layer => mapLayerIntoNumberArray(layer));
+}
 
 const countDigit = (input: number[], digit: number): number => {
     return input.filter(a => a===digit).length;
