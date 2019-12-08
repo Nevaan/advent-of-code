@@ -109,10 +109,61 @@ describe('task5', () => {
     });
 
     test('getCrossingPoints', () => {
-        const result = getCrossingPoints(["R8","U5","L5","D3"], ["U7","R6","D4","L4"]);
+
+        let wire1 = [
+            {x: 0, y: 0},
+            {x: 0, y: 1},
+            {x: 0, y: 2},
+            {x: 0, y: 3},
+            {x: 0, y: 4},
+            {x: 0, y: 5},
+            {x: 0, y: 6},
+            {x: 0, y: 7},
+            {x: 0, y: 8},
+            {x: 1, y: 8},
+            {x: 2, y: 8},
+            {x: 3, y: 8},
+            {x: 4, y: 8},
+            {x: 5, y: 8},
+            {x: 5, y: 7},
+            {x: 5, y: 6},
+            {x: 5, y: 5},
+            {x: 5, y: 4},
+            {x: 5, y: 3},
+            {x: 4, y: 3},
+            {x: 3, y: 3},
+            {x: 2, y: 3}
+        ]
+
+        let wire2 = [
+            {x: 0, y: 0},
+            {x: 1, y: 0},
+            {x: 2, y: 0},
+            {x: 3, y: 0},
+            {x: 4, y: 0},
+            {x: 5, y: 0},
+            {x: 6, y: 0},
+            {x: 7, y: 0},
+            {x: 7, y: 1},
+            {x: 7, y: 2},
+            {x: 7, y: 3},
+            {x: 7, y: 4},
+            {x: 7, y: 5},
+            {x: 7, y: 6},
+            {x: 6, y: 6},
+            {x: 5, y: 6},
+            {x: 4, y: 6},
+            {x: 3, y: 6},
+            {x: 3, y: 5},
+            {x: 3, y: 4},
+            {x: 3, y: 3},
+            {x: 3, y: 2}
+        ]
+
+        const result = getCrossingPoints(wire1, wire2);
         expect(result.length).toBe(2);
         expect(result).toContainEqual({x: 3, y: 3});
-        expect(result).toContainEqual({x: 6, y: 5});
+        expect(result).toContainEqual({x: 5, y: 6});
     })
 
     test('taxiCab', () => {

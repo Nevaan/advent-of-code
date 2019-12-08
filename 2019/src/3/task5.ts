@@ -76,9 +76,7 @@ export const getWirePath = (path: string[]): Point[] => {
     return path.reduce((acc, currentPath) => [...acc,  ...getPath(acc[acc.length-1], currentPath)], startingPath);
 }
 
-export const getCrossingPoints = (path1:string[], path2: string[]): Point[] => {
-    let wire1: Point[] = getWirePath(path1);
-    let wire2: Point[] = getWirePath(path2);
+export const getCrossingPoints = (wire1:Point[] , wire2: Point[] ): Point[] => {
 
     return wire1.filter(point => {
         if(wire2.find((x) => x.x===point.x && x.y===point.y)!==undefined) return true;
@@ -91,7 +89,10 @@ export const taxiCab = (point1: Point, point2: Point): number => {
 }
 
 export const findShortestPath = (path1: string[], path2: string[]): number => {
-    const crossingPoints: Point[] = getCrossingPoints(path1, path2);
+    let wire1: Point[] = getWirePath(path1);
+    let wire2: Point[] = getWirePath(path2);
+
+    const crossingPoints: Point[] = getCrossingPoints(wire1, wire2);
     let paths: number[] = crossingPoints.map( point => taxiCab({x: 0, y: 0}, point));
     return Math.min(...paths);
 }
