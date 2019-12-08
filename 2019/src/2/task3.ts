@@ -22,20 +22,30 @@ export const extractValues = (programCode: number[], position: number): Extracte
     }
 }
 
-export const calculate = (programCode: number[], currentPosition: number): number[] => {
-    const command = programCode[currentPosition]; 
-    switch (command) {
-        case 99:
-            return programCode;
-        case 1: 
-            const values: ExtractedValues = extractValues(programCode, currentPosition);
+interface Command {
+    execute: (programCode: number[], currentPosition: number) => number[];
+}
+
+class Command99 implements Command {
+    execute = (programCode: number[], currentPosition: number) => {
+        return programCode;
+    }
+}
+
+class Command1 implements Command {
+    execute = (programCode: number[], currentPosition: number) => {
+        const values: ExtractedValues = extractValues(programCode, currentPosition);
             return programCode.map((value, index) => {
                 if(index === values.resultIndex) {
                     return opCode1(programCode[values.operand1], programCode[values.operand2]);
                 }
                 return value;
-            });
-        case 2: 
+        });
+    }
+}
+
+class Command2 implements Command {
+    execute = (programCode: number[], currentPosition: number) => {
         const values2: ExtractedValues = extractValues(programCode, currentPosition);
             return programCode.map((value, index) => {
                 if(index === values2.resultIndex) {
@@ -43,8 +53,27 @@ export const calculate = (programCode: number[], currentPosition: number): numbe
                 }
                 return value;
             });
-    };
-    return [];
+    }
+}
+
+export const getInterpreter = (commands: Map<number, Command>): (programCode: number[], currentPosition: number) => number[]  => {
+    return (programCode: number[], currentPosition: number): number[] => {
+        const command = programCode[currentPosition]; 
+        return (commands.get(command) as Command).execute(programCode, currentPosition);
+    }
+};
+
+export const task3Commands = (): Map<number, Command> => {
+    const commandMap: Map<number, Command> = new Map<number,Command>();
+    commandMap.set(1, new Command1);
+    commandMap.set(2, new Command2);
+    commandMap.set(99, new Command99);
+    return commandMap;
+}
+
+export const calculate = (programCode: number[], currentPosition: number): number[] => {
+    let interpreter = getInterpreter(task3Commands());
+    return interpreter(programCode, currentPosition);
 }
 
 export const interpret = (programCode: number[]): number[] => {
