@@ -22,7 +22,7 @@ export const extractValues = (programCode: number[], position: number): Extracte
     }
 }
 
-interface Command {
+export interface Command {
     execute: (programCode: number[], currentPosition: number) => number[];
 }
 
