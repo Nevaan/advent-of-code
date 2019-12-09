@@ -44,7 +44,6 @@ export const task16Fn = () => {
     let result = layers.map(layer => takeFirstOtherThan(layer, 2));
     let resultAsString = result.reduce((acc, val) => acc+ val, "");
     let readable: string[] = sliceIntoLayers(resultAsString, 25,1);
-    // console.log(readable);
     readable = readable.map( line => {
         return line.split("").map(i => (i === "0" ? ' ' : i)).join("")
     });

@@ -1,37 +1,40 @@
 import { day4LowerLimit, day4UpperLimit } from "./input4";
 
-export const checkCriteria = (testNumber: number): boolean => {
+export const task7TestFns = [
+    (x: number): boolean => {
+        let xAsString = "" + x;
+        return xAsString.length === 6;
+    },
+    (x: number): boolean => {
+        let xAsString = "" + x;
+        let digitArray: string[] = xAsString.split("");
 
-    let numberAsString = "" + testNumber;
+        return digitArray.reduce((acc, current) => {
+            let currentAdjacentTest = acc.lastProcessedDigit === current;
+            return {
+                lastProcessedDigit: current, testResult: acc.testResult || currentAdjacentTest
+            }
+        }, { lastProcessedDigit: '0', testResult: false }).testResult;
+    },
+    (x: number): boolean => {
+        let xAsString = "" + x;
+        let digitArray: string[] = xAsString.split("");
 
-    if( numberAsString.length !== 6) {
-        return false;
+        return digitArray.reduce((acc, current) => {
+            let currentIncreaseTest = +acc.lastProcessedDigit <= +current;
+            return {lastProcessedDigit: current, testResult: acc.testResult && currentIncreaseTest };
+        }, {lastProcessedDigit: '0', testResult: true }).testResult;
     }
+];
 
-    let digitArray: string[] = numberAsString.split("");
-
-    let result = digitArray.reduce((acc, current) => {
-        let currentAdjacentTest = acc.lastProcessedDigit === current;
-        let currentIncreaseTest = +acc.lastProcessedDigit <= +current;
-
-        return {
-            lastProcessedDigit: current,
-            adjacentTestResult: acc.adjacentTestResult || currentAdjacentTest,
-            increaseTest: acc.increaseTest && currentIncreaseTest
-        };
-    }, {
-        lastProcessedDigit: '0',
-        adjacentTestResult: false,
-        increaseTest: true
-    });
-
-    return result.adjacentTestResult && result.increaseTest;
+export const checkCriteria = (testNumber: number, criteria: ((x: number) => boolean)[]): boolean => {
+    return criteria.every(fn => fn(testNumber));
 }
 
 export const task7Fn = () => {
     let count = 0;
     for(let i = day4LowerLimit; i <= day4UpperLimit; i++) {
-        if(checkCriteria(i)) count ++;
+        if(checkCriteria(i, task7TestFns)) count ++;
     }
 
     return count;
